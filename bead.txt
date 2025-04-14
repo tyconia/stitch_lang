@@ -1,0 +1,43 @@
+(
+  title: "Arithmetic",
+  description: "applies operations between 2 operands",
+  archetype: Transformation,
+  inputs: {
+    "operand_lhs": (
+      title: "Operand Left side",
+      description: "the left hand side of the expression",
+      status: Write,
+      expected_type: Number,
+    ),
+    "operation": (
+      title: "Operator",
+      description: "sets the mode of operation",
+      status: Write,
+      expected_type: Choice(
+        options: [
+          /*[0]*/ "+",
+          /*[1]*/ "-",
+          /*[2]*/ "/",
+          /*[3]*/ "*",
+        ],
+      ),
+    ),
+    "operand_rhs": (
+      title: "Operand Right side",
+      description: "the right hand side of the expression",
+      status: Write,
+      expected_type: Number,
+    ),
+  },
+  outputs: {
+    "result": (
+      title: "Arithmetic Result",
+      description: "result of the operation",
+      status: ReadOnly,
+      expected_type: Number,
+    ),
+  },
+  implement: Std(
+    src: "util/calc",
+  ),
+)

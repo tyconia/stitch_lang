@@ -1,0 +1,17 @@
+(
+  title: "Printer",
+  description: "prints value to stdout",
+  archetype: Effect,
+  inputs: {
+    "input": (
+      title: "",
+      description: "",
+      status: Write,
+      expected_type: String,
+    ),
+  },
+  outputs: {},
+  implement: Std(
+    src: "stdlib/utils/stdout",
+  ),
+)

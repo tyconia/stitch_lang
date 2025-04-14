@@ -1,0 +1,30 @@
+(
+  beads: [
+    /*[0]*/ "452ad122-cae1-580c-9c52-a46cffece71b",
+    /*[1]*/ "c7bda4ef-b6e2-529b-ad2a-51b40737333e",
+  ],
+  stitches: [
+    /*[0]*/ (
+      link_type: Adjacent,
+      src: (
+        bead: 0,
+        slot: 0,
+      ),
+      to: [
+        /*[0]*/ (
+          bead: 1,
+          slot: 0,
+        ),
+      ],
+    ),
+  ],
+  inlines: [
+    /*[0]*/ (
+      (
+        bead: 0,
+        slot: 0,
+      ),
+      String("Hello world!"),
+    ),
+  ],
+)
