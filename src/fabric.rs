@@ -5,8 +5,12 @@ use serde::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Fabric {
-    beads: Vec<Uuid>,
-    stitches: Vec<Stitch>,
+    // can have multiple instances of the same bead no biggie
+    pub beads: Vec<Uuid>,
+    pub stitches: Vec<Stitch>,
+    // requires stdlib
+    //pub stdlib: bool,
+    pub static_vars: Vec<SlotArg>,
 }
 
 impl Fabric {
@@ -49,7 +53,6 @@ impl Fabric {
     //    .collect()
     //}
 
-    #[cfg(not(feature = "bevy"))]
     pub fn entry_points(&mut self, rt: &Runtime) -> Result<Vec<Uuid>, RuntimeError> {
         let entries: Vec<Uuid> = self
             .beads
@@ -73,7 +76,6 @@ impl Fabric {
     }
 }
 
-#[cfg(not(feature = "bevy"))]
 #[cfg(test)]
 mod test {
     //#[test]

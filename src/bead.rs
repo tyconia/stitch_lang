@@ -7,7 +7,6 @@ use serde::*;
 pub type BeadParam = HashMap<String, Slot>;
 pub type BeadArg = Vec<(String, SlotArg)>;
 
-#[cfg(not(feature = "bevy"))]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Bead {
     pub title: String,
@@ -19,66 +18,14 @@ pub struct Bead {
     pub implement: Execute,
 }
 
-#[cfg(feature = "bevy")]
-use bevy::prelude::*;
-
-#[cfg(feature = "bevy")]
-#[derive(Serialize, Deserialize, Debug, Component)]
-pub struct Bead {
-    pub title: String,
-    pub description: String,
-    pub archetype: BeadArchetype,
-
-    pub inputs: BeadParam,
-    pub outputs: BeadParam,
-    pub implement: Execute,
-}
-
-// TODO: index must be Entity
-// instance of a bead in a fabric
-#[cfg(feature = "bevy")]
-#[derive(Component)]
-pub struct BeadHandle {
-    pub index: usize,
-    pub bead: Uuid,
-}
-
-impl Bead {
-    // creates
-    pub async fn spool(&mut self, sources: &[Stitch]) {}
-
-    #[cfg(feature = "bevy")]
-    pub fn spawn(&self, fabric_parent: &mut ChildBuilder, fabric: &Fabric) {
-        // spawn an instance of a bead
-        let bead_instance = fabric_parent
-            .spawn(BeadHandle {
-                index: 0,
-                bead: Uuid::new_v5(&Uuid::NAMESPACE_URL, "".to_string().as_bytes()),
-            })
-            .with_children(|bead_handle| {
-                self.inputs.iter().enumerate().map(|(input_index, slot)| {
-                    bead_handle.spawn(BeadSlot::from((bead_handle.parent_entity(), input_index)));
-                });
-            })
-            .id();
-    }
-
-    #[cfg(feature = "bevy")]
-    pub fn spawn_await_inputs(
-        &self,
-        cmd: &Commands,
-        bead: Query<(&BeadHandle, &Stitch)>,
-    ) -> Vec<Entity> {
-        vec![]
-    }
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BeadArchetype {
     // provides values in diagnostic mode
     Tester,
     // basic input - output node
     Transformation,
+    // like transformation but with green threads
+    Logical,
     // entry point of the bead tree, provides a payload of values
     Event,
     // read global / environment state

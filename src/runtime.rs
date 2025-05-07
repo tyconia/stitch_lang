@@ -1,12 +1,9 @@
 use crate::prelude::*;
 
-#[cfg(not(feature = "bevy"))]
 pub struct ImplementFn(pub Box<dyn Fn(BeadArg) -> BeadArg>);
 
-#[cfg(not(feature = "bevy"))]
 unsafe impl Send for ImplementFn {}
 
-#[cfg(not(feature = "bevy"))]
 pub struct Runtime {
     tick: u128,
     implements: HashMap<Uuid, ImplementFn>,
@@ -14,7 +11,6 @@ pub struct Runtime {
     receiver: mpsc::Receiver<RuntimeReception>,
 }
 
-#[cfg(not(feature = "bevy"))]
 #[derive(Debug)]
 pub enum RuntimeReception {
     Arg(SlotArg),
@@ -22,7 +18,6 @@ pub enum RuntimeReception {
     Shutdown,
 }
 
-#[cfg(not(feature = "bevy"))]
 impl fmt::Debug for Runtime {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         // You can choose to exclude field3 or handle it differently
@@ -34,7 +29,6 @@ impl fmt::Debug for Runtime {
     }
 }
 
-#[cfg(not(feature = "bevy"))]
 impl Runtime {
     pub fn new() -> (Self, mpsc::Sender<RuntimeReception>) {
         let (tx, rx) = mpsc::channel(usize::MAX / 8);
@@ -144,7 +138,6 @@ impl fmt::Display for RuntimeError {
 #[cfg(test)]
 mod tests {
     #[test]
-    #[cfg(not(feature = "bevy"))]
     fn execute_runtime() {
         use super::*;
         use crate::runtime;
@@ -159,8 +152,7 @@ mod tests {
         let (mut rt, tx) = Runtime::new();
 
         rt.register_impl(
-            runtime::ImplementFn(
-            Box::new(|params| {
+            runtime::ImplementFn(Box::new(|params| {
                 let lhs = params
                     .iter()
                     .find(|(s, _)| s == OP_L)

@@ -1,9 +1,6 @@
 use stitch_lang::prelude::*;
-
-use tokio::sync::oneshot;
 use tokio::task::JoinError;
 
-#[cfg(not(feature = "bevy"))]
 #[tokio::main]
 async fn main() -> Result<(), JoinError> {
     // Set up the subscriber to capture logs at the `DEBUG` level and higher
@@ -11,7 +8,7 @@ async fn main() -> Result<(), JoinError> {
         .with_max_level(tracing_subscriber::filter::LevelFilter::DEBUG)
         .init();
 
-    let (mut rt, tx) = Runtime::new();
+    let (rt, tx) = Runtime::new();
 
     let rt_task = tokio::spawn(async move {
         let _ = rt.run().await;

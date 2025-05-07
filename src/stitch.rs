@@ -1,48 +1,19 @@
 use crate::prelude::*;
 use serde::*;
 
-#[cfg(not(feature = "bevy"))]
 impl From<(usize, usize)> for BeadSlot {
     fn from((bead, slot): (usize, usize)) -> Self {
         Self { bead, slot }
     }
 }
 
-#[cfg(not(feature = "bevy"))]
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BeadSlot {
     bead: usize,
     slot: usize,
 }
 
-#[cfg(not(feature = "bevy"))]
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-pub struct Stitch {
-    pub link_type: StichLink,
-    pub src: BeadSlot,
-    pub to: BeadSlot,
-}
-
-#[cfg(feature = "bevy")]
-use bevy::prelude::*;
-
-#[cfg(feature = "bevy")]
-impl From<(Entity, usize)> for BeadSlot {
-    fn from((bead, slot_index): (Entity, usize)) -> Self {
-        Self { bead, slot_index }
-    }
-}
-
-// TODO: index must be Entity
-#[cfg(feature = "bevy")]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Component)]
-pub struct BeadSlot {
-    bead: Entity,
-    slot_index: usize,
-}
-
-#[cfg(feature = "bevy")]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Component)]
 pub struct Stitch {
     pub link_type: StichLink,
     pub src: BeadSlot,
@@ -72,10 +43,10 @@ impl Stitch {
     //}
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum StichLink {
     // right next to each other without caveats
     Adjacent,
     // indicating a connection to a predecessor implying a loop
-    Feedback { bead: uuid::Uuid },
+    Feedback { bead: usize },
 }

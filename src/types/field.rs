@@ -1,10 +1,6 @@
 use crate::prelude::*;
 use serde::*;
 
-// TODO: bevy feats
-#[cfg(feature = "bevy")]
-use bevy::prelude::*;
-
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Slot {
     pub title: String,
@@ -20,7 +16,7 @@ pub enum FieldStatus {
     Write,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum SlotParam {
     Bool,
     String,
@@ -31,8 +27,9 @@ pub enum SlotParam {
     Stateful(Box<Self>),
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub enum SlotArg {
+    Type(SlotParam),
     Bool(bool),
     String(String),
     Number(i32),
@@ -48,6 +45,7 @@ pub enum SlotArg {
 impl From<SlotArg> for SlotParam {
     fn from(arg: SlotArg) -> Self {
         match arg {
+            SlotArg::Type(param) => param,
             SlotArg::Bool(_) => SlotParam::Bool,
             SlotArg::String(_) => SlotParam::String,
             SlotArg::Number(_) => SlotParam::Number,

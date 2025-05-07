@@ -2,14 +2,12 @@ mod events;
 mod utils;
 use crate::prelude::*;
 
-#[cfg(not(feature = "bevy"))]
 pub fn load_stdlib(rt: &mut Runtime) {
     let print = include_str!("utils/print.ron");
     let ron = ron::from_str(print).unwrap();
     rt.register_bead("stdlib/utils/print".into(), ron);
 }
 
-#[cfg(not(feature = "bevy"))]
 #[cfg(test)]
 mod test {
     #[test]
